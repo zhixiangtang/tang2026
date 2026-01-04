@@ -174,19 +174,24 @@
                 <div class="info-card">
                     <h3>📅 放假安排</h3>
                     <p><span class="highlight">2026年春节假期</span>是史上最长的春节假期之一。</p>
-                    <p>放假时间：<span class="highlight">2月15日（腊月二十八）至2月23日（正月初七）</span>[citation:1][citation:3][citation:7]。</p>
-                    <p>共放假调休：<span class="highlight">9天</span>[citation:2][citation:8][citation:9]。</p>
-                    <p>调休上班：2月14日（周六）、2月28日（周六）[citation:1][citation:3]。</p>
+                    <p>放假时间：<span class="highlight">2月15日（腊月二十八）至2月23日（正月初七）</span>。</p>
+                    <p>共放假调休：<span class="highlight">9天</span>。</p>
+                    <p>调休上班：2月14日（周六）、2月28日（周六）。</p>
                 </div>
                 <div class="info-card">
                     <h3>✨ 新春小贴士</h3>
-                    <p>• 春节是阖家团圆的日子，记得提前规划好行程[citation:9]。</p>
-                    <p>• 假期期间高速公路对小型客车实行免费通行[citation:8]。</p>
-                    <p>• 鼓励结合带薪年休假形成更长假期，实现错峰出行[citation:1][citation:7]。</p>
-                    <p>• 出行与欢聚时，请注意安全，度过一个祥和平安的假期[citation:1][citation:3]。</p>
+                    <p>• 春节是阖家团圆的日子，记得提前规划好行程。</p>
+                    <p>• 假期期间高速公路对小型客车实行免费通行。</p>
+                    <p>• 鼓励结合带薪年休假形成更长假期，实现错峰出行。</p>
+                    <p>• 出行与欢聚时，请注意安全，度过一个祥和平安的假期。</p>
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- 创作者信息按钮 -->
+    <div class="creator-info">
+        <button id="creatorBtn">创作者</button>
     </div>
 
     <script>
@@ -223,6 +228,51 @@
         // 页面加载后立即更新一次，然后每秒更新一次
         updateCountdown();
         setInterval(updateCountdown, 1000);
+
+        // 创作者信息显示功能
+        document.getElementById('creatorBtn').addEventListener('click', function() {
+            alert('创作者：TangZhiXiang');
+        });
     </script>
+
+    <style>
+        /* 创作者按钮样式 */
+        .creator-info {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        #creatorBtn {
+            background: rgba(229, 57, 53, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(229, 57, 53, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        #creatorBtn:hover {
+            background: rgba(229, 57, 53, 1);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(229, 57, 53, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .creator-info {
+                bottom: 20px;
+                right: 20px;
+            }
+            #creatorBtn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </body>
 </html>
