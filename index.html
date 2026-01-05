@@ -920,7 +920,7 @@
                 <p><span class="highlight">春节：2月15日（正月初一）</span> - 农历新年，最重要的传统节日</p>
                 <p><span class="highlight">元宵节：3月3日（正月十五）</span> - 吃元宵、赏花灯</p>
                 <p><span class="highlight">清明节：4月4日</span> - 扫墓祭祖、踏青郊游</p>
-                <p><span class="highlight">端午节：6月19日（五月初五）</span> - 吃粽子、赛龙舟</p>
+                    <p><span class="highlight">端午节：6月19日（五月初五）</span> - 吃粽子、赛龙舟</p>
                 <p><span class="highlight">中秋节：9月25日（八月十五）</span> - 赏月、吃月饼</p>
                 <p><span class="highlight">国庆节：10月1日</span> - 中华人民共和国成立纪念日</p>
             </div>
@@ -932,11 +932,10 @@
         <button id="creatorBtn">创作者</button>
     </div>
 
-    <!-- 音乐 -->
+    <!-- 音乐 - 使用同目录下的newyear.mp3 -->
     <audio id="backgroundMusic" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-new-year-2023-1138.mp3" type="audio/mpeg">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        您的浏览器不支持音频元素
+        <source src="newyear.mp3" type="audio/mpeg">
+        您的浏览器不支持音频元素，请确保newyear.mp3文件与HTML文件在同一目录
     </audio>
 
     <script>
@@ -988,15 +987,9 @@
                     isMusicPlaying = false;
                     updateMusicButton();
                     
-                    // 添加点击事件来启动音乐
-                    document.addEventListener('click', function startMusicOnClick() {
-                        bgMusic.play().then(() => {
-                            console.log("用户交互后音乐播放成功");
-                            isMusicPlaying = true;
-                            updateMusicButton();
-                            document.removeEventListener('click', startMusicOnClick);
-                        });
-                    }, { once: true });
+                    // 显示提示
+                    musicText.textContent = '点击播放音乐';
+                    musicControl.style.background = 'rgba(255, 0, 0, 0.3)';
                 });
             }
         }
@@ -1024,6 +1017,7 @@
                     isMusicPlaying = true;
                 }).catch(e => {
                     console.log("音乐播放失败:", e);
+                    alert("无法播放音乐，请确保newyear.mp3文件与HTML文件在同一目录");
                 });
             }
             updateMusicButton();
@@ -1219,28 +1213,33 @@
 
         // 播放爆炸音效
         function playExplosionSound() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // 创建多个音调模拟爆炸声
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => {
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    // 随机音高
-                    const frequency = 200 + Math.random() * 600;
-                    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
-                    
-                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                    
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.3);
-                }, i * 50);
+            // 尝试创建音频上下文
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 创建多个音调模拟爆炸声
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        // 随机音高
+                        const frequency = 200 + Math.random() * 600;
+                        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+                        
+                        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                        
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.3);
+                    }, i * 50);
+                }
+            } catch (error) {
+                console.log("无法播放爆炸音效:", error);
             }
         }
 
@@ -1468,9 +1467,6 @@
             });
         }
 
-        // 状态变量
-        let hasCelebrated = false;
-
         // 初始化日历
         function initCalendar() {
             renderCalendar(currentYear, currentMonth);
@@ -1530,6 +1526,9 @@
                 });
             });
         }
+
+        // 状态变量
+        let hasCelebrated = false;
 
         // 事件监听
         document.getElementById('firecrackerBtn').addEventListener('click', function(e) {
