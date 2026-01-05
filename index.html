@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026年春节倒计时 - 喜迎新春</title>
+    <title>2026年春节倒计时 - 马年大吉</title>
     <style>
         * {
             margin: 0;
@@ -18,6 +18,15 @@
             color: #FFD700;
             overflow-x: hidden;
             position: relative;
+        }
+        
+        /* 马年装饰元素 */
+        .horse-element {
+            position: absolute;
+            font-size: 40px;
+            z-index: 1;
+            opacity: 0.7;
+            user-select: none;
         }
         
         /* 灯笼装饰 */
@@ -150,21 +159,21 @@
         }
         
         .main-title:after {
-            content: '🐉';
+            content: '🐎';
             font-size: 3rem;
             position: absolute;
             right: -60px;
             top: 10px;
-            animation: dragonFloat 3s ease-in-out infinite;
+            animation: horseFloat 3s ease-in-out infinite;
         }
         
         .main-title:before {
-            content: '🧧';
+            content: '🐴';
             font-size: 3rem;
             position: absolute;
             left: -60px;
             top: 10px;
-            animation: redPacketFloat 3s ease-in-out infinite alternate;
+            animation: horseFloat 3s ease-in-out infinite alternate-reverse;
         }
         
         @keyframes titleGlow {
@@ -172,14 +181,9 @@
             to { text-shadow: 0 0 20px #FF0000, 0 0 40px #FF4500, 0 0 60px #FF8C00; }
         }
         
-        @keyframes dragonFloat {
+        @keyframes horseFloat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-15px) rotate(5deg); }
-        }
-        
-        @keyframes redPacketFloat {
-            0%, 100% { transform: translateY(0) rotate(-10deg); }
-            50% { transform: translateY(-10px) rotate(10deg); }
         }
         
         .subtitle {
@@ -197,6 +201,52 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+        }
+        
+        /* 选项卡导航 */
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+        
+        .tab-btn {
+            background: rgba(0, 0, 0, 0.6);
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(45deg, #FF0000, #FF4500);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* 内容面板 */
+        .content-panel {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .content-panel.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         /* 倒计时区域 */
@@ -344,6 +394,164 @@
             font-size: 1.2em;
         }
         
+        /* 日历区域 */
+        .calendar-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            border: 3px solid #FFD700;
+            margin-bottom: 40px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #FFD700;
+        }
+        
+        .calendar-title {
+            font-size: 2rem;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #FFD700;
+            color: #FFD700;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        
+        .calendar-day-header {
+            text-align: center;
+            padding: 15px 5px;
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: rgba(255, 69, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .calendar-day:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .day-number {
+            font-size: 1.5rem;
+            color: #FFF;
+            font-weight: bold;
+        }
+        
+        .day-label {
+            font-size: 0.8rem;
+            color: #FFD700;
+            margin-top: 5px;
+        }
+        
+        .day-other-month {
+            opacity: 0.4;
+        }
+        
+        .day-today {
+            background: rgba(255, 69, 0, 0.5);
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        }
+        
+        .day-spring-festival {
+            background: linear-gradient(135deg, #FF0000, #FF4500);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            position: relative;
+        }
+        
+        .day-spring-festival:after {
+            content: '🐎';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 1rem;
+        }
+        
+        .festival-marker {
+            position: absolute;
+            bottom: 5px;
+            font-size: 0.7rem;
+            color: #FFD700;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+        
+        /* 月份指示器 */
+        .month-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .month-btn {
+            background: rgba(0, 0, 0, 0.5);
+            color: #FFD700;
+            border: 1px solid #FFD700;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .month-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .month-btn.active {
+            background: linear-gradient(45deg, #FF0000, #FF4500);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
         /* 鞭炮按钮 */
         .firecracker-btn {
             text-align: center;
@@ -441,6 +649,10 @@
             .spring-couplet {
                 display: none;
             }
+            
+            .calendar-grid {
+                gap: 5px;
+            }
         }
         
         @media (max-width: 768px) {
@@ -469,6 +681,12 @@
             .number {
                 font-size: 3.5rem;
             }
+            
+            .tab-btn {
+                min-width: 120px;
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -491,6 +709,15 @@
             .music-btn {
                 padding: 8px 15px;
                 font-size: 14px;
+            }
+            
+            .tab-navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .calendar-title {
+                font-size: 1.5rem;
             }
         }
         
@@ -556,32 +783,39 @@
     
     <!-- 春联 -->
     <div class="spring-couplet left">
-        <div>新</div>
-        <div>春</div>
-        <div>大</div>
-        <div>吉</div>
+        <div>马</div>
+        <div>到</div>
+        <div>成</div>
+        <div>功</div>
     </div>
     
     <div class="spring-couplet right">
-        <div>万</div>
-        <div>事</div>
-        <div>如</div>
-        <div>意</div>
+        <div>马</div>
+        <div>年</div>
+        <div>大</div>
+        <div>吉</div>
     </div>
     
     <!-- 主内容 -->
     <div class="container">
         <header class="header">
             <h1 class="main-title">2026年春节倒计时</h1>
-            <h2 class="subtitle">龙年大吉 · 喜迎新春</h2>
-            <div class="year-title">农历丙午年 · 春节</div>
+            <h2 class="subtitle">马年吉祥 · 龙马精神</h2>
+            <div class="year-title">农历丙午年 · 马年春节</div>
         </header>
 
-        <main>
+        <!-- 选项卡导航 -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="countdown">⏰ 春节倒计时</button>
+            <button class="tab-btn" data-tab="calendar">📅 2026年日历</button>
+        </div>
+
+        <!-- 倒计时面板 -->
+        <section id="countdown-panel" class="content-panel active">
             <!-- 倒计时区域 -->
-            <section class="countdown-container">
+            <div class="countdown-container">
                 <h2 class="countdown-title">
-                    <span>⏰</span> 距离2026年春节还有 <span>⏰</span>
+                    <span>🐎</span> 距离2026年春节还有 <span>🐎</span>
                 </h2>
                 <div class="countdown-display">
                     <div class="time-unit">
@@ -601,10 +835,17 @@
                         <div class="label">秒钟</div>
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- 信息面板 -->
-            <section class="info-panels">
+            <div class="info-panels">
+                <div class="info-card">
+                    <h3>🐎 马年特色</h3>
+                    <p>2026年是农历<span class="highlight">丙午年</span>，生肖属<span class="highlight">马</span>。</p>
+                    <p>马年出生的人：<span class="highlight">性格开朗、思维敏捷、善于交际</span>。</p>
+                    <p>马年象征：<span class="highlight">勇往直前、事业有成、马到成功</span>。</p>
+                    <p>吉祥物：<span class="highlight">马形饰品、红色物品、金元宝</span>。</p>
+                </div>
                 <div class="info-card">
                     <h3>📅 放假安排</h3>
                     <p><span class="highlight">2026年春节假期</span>是史上最长的春节假期之一。</p>
@@ -620,7 +861,7 @@
                     <p>• 🧨 守岁：辞旧岁，迎新年</p>
                     <p>• 🎁 拜年：互致问候，祝福安康</p>
                 </div>
-            </section>
+            </div>
             
             <!-- 放鞭炮按钮 -->
             <div class="firecracker-btn">
@@ -628,7 +869,45 @@
                     <span>🧨</span> 点击放鞭炮迎新年 <span>🧨</span>
                 </button>
             </div>
-        </main>
+        </section>
+
+        <!-- 日历面板 -->
+        <section id="calendar-panel" class="content-panel">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h2 class="calendar-title">
+                        <span>📅</span> <span id="current-month-year">2026年1月</span>
+                    </h2>
+                    <div class="calendar-nav">
+                        <button class="nav-btn" id="prev-year">«</button>
+                        <button class="nav-btn" id="prev-month">‹</button>
+                        <button class="nav-btn" id="today-btn">今</button>
+                        <button class="nav-btn" id="next-month">›</button>
+                        <button class="nav-btn" id="next-year">»</button>
+                    </div>
+                </div>
+                
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- 日历将通过JavaScript动态生成 -->
+                </div>
+                
+                <!-- 月份快速导航 -->
+                <div class="month-indicator" id="month-indicator">
+                    <!-- 月份按钮将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <!-- 日历说明 -->
+            <div class="info-card" style="margin-top: 30px;">
+                <h3>📋 2026年重要日期</h3>
+                <p><span class="highlight">春节：2月15日（正月初一）</span> - 农历新年，最重要的传统节日</p>
+                <p><span class="highlight">元宵节：3月3日（正月十五）</span> - 吃元宵、赏花灯</p>
+                <p><span class="highlight">清明节：4月4日</span> - 扫墓祭祖、踏青郊游</p>
+                <p><span class="highlight">端午节：6月19日（五月初五）</span> - 吃粽子、赛龙舟</p>
+                <p><span class="highlight">中秋节：9月25日（八月十五）</span> - 赏月、吃月饼</p>
+                <p><span class="highlight">国庆节：10月1日</span> - 中华人民共和国成立纪念日</p>
+            </div>
+        </section>
     </div>
     
     <!-- 创作者按钮 -->
@@ -638,13 +917,17 @@
 
     <!-- 音乐 -->
     <audio id="backgroundMusic" loop>
-        <source src="newyear.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-new-year-2023-1138.mp3" type="audio/mpeg">
         您的浏览器不支持音频元素
     </audio>
 
     <script>
         // 定义2026年春节日期（2月15日，注意月份从0开始计数）
         const springFestival2026 = new Date(2026, 1, 15, 0, 0, 0);
+        
+        // 日历相关变量
+        let currentYear = 2026;
+        let currentMonth = 0; // 0-11代表1-12月
 
         // 音乐控制
         const bgMusic = document.getElementById('backgroundMusic');
@@ -653,8 +936,44 @@
         const musicText = document.getElementById('musicText');
         let isMusicPlaying = true;
 
+        // 自动播放音乐的尝试
+        function autoPlayMusic() {
+            // 创建用户交互事件以触发自动播放
+            document.addEventListener('click', function initAudio() {
+                bgMusic.play().then(() => {
+                    console.log("音乐自动播放成功");
+                    isMusicPlaying = true;
+                    updateMusicButton();
+                }).catch(e => {
+                    console.log("音乐自动播放需要用户交互");
+                    // 显示提示让用户知道需要点击才能播放音乐
+                    musicControl.style.background = 'rgba(255, 0, 0, 0.3)';
+                    musicText.textContent = '点击播放音乐';
+                });
+                
+                // 移除事件监听器，只执行一次
+                document.removeEventListener('click', initAudio);
+            });
+            
+            // 尝试自动播放（现代浏览器通常需要用户交互）
+            bgMusic.play().then(() => {
+                console.log("音乐自动播放成功");
+                isMusicPlaying = true;
+                updateMusicButton();
+            }).catch(e => {
+                console.log("音乐自动播放失败，等待用户交互");
+                isMusicPlaying = false;
+                updateMusicButton();
+            });
+        }
+
         // 初始化背景装饰
         function initDecorations() {
+            // 创建马年元素
+            for (let i = 0; i < 8; i++) {
+                createHorseElement(i);
+            }
+
             // 创建雪花/福字飘落
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
@@ -667,12 +986,24 @@
                 createGoldCoin(i);
             }
 
-            // 自动开始播放音乐
-            bgMusic.play().catch(e => {
-                console.log("音乐自动播放失败，需要用户交互");
-                isMusicPlaying = false;
-                updateMusicButton();
-            });
+            // 自动播放音乐
+            autoPlayMusic();
+        }
+
+        // 创建马年元素
+        function createHorseElement(index) {
+            const horse = document.createElement('div');
+            horse.className = 'horse-element';
+            horse.textContent = '🐎';
+            horse.style.fontSize = Math.random() * 30 + 30 + 'px';
+            horse.style.left = Math.random() * 100 + 'vw';
+            horse.style.top = Math.random() * 100 + 'vh';
+            horse.style.opacity = Math.random() * 0.4 + 0.3;
+            horse.style.animation = `sway ${Math.random() * 8 + 6}s ease-in-out infinite`;
+            horse.style.animationDelay = index * 0.8 + 's';
+            horse.style.zIndex = '1';
+            
+            document.body.appendChild(horse);
         }
 
         // 创建飘落元素
@@ -682,11 +1013,11 @@
             
             if (isFu) {
                 element.className = 'fu-character';
-                element.textContent = '福';
+                element.textContent = Math.random() > 0.7 ? '🐎' : '福';
                 element.style.fontSize = Math.random() * 20 + 20 + 'px';
             } else {
                 element.className = 'snowflake';
-                element.textContent = '❄';
+                element.textContent = Math.random() > 0.5 ? '❄' : '✨';
                 element.style.fontSize = Math.random() * 15 + 15 + 'px';
             }
             
@@ -706,283 +1037,4 @@
         }
 
         // 创建金元宝
-        function createGoldCoin(index) {
-            const coin = document.createElement('div');
-            coin.className = 'gold-coin';
-            coin.style.left = Math.random() * 100 + 'vw';
-            coin.style.top = Math.random() * 100 + 'vh';
-            coin.style.opacity = Math.random() * 0.3 + 0.2;
-            coin.style.transform = `rotate(${Math.random() * 360}deg)`;
-            coin.style.animation = `sway ${Math.random() * 8 + 4}s ease-in-out infinite`;
-            coin.style.animationDelay = index * 0.5 + 's';
-            
-            document.body.appendChild(coin);
-        }
-
-        // 更新倒计时
-        function updateCountdown() {
-            const now = new Date();
-            const timeDiff = springFestival2026 - now;
-
-            if (timeDiff <= 0) {
-                document.getElementById('days').textContent = '00';
-                document.getElementById('hours').textContent = '00';
-                document.getElementById('minutes').textContent = '00';
-                document.getElementById('seconds').textContent = '00';
-                document.querySelector('.countdown-title').innerHTML = '<span>🎉</span> 新春快乐！龙年大吉！ <span>🎉</span>';
-                
-                // 自动放烟花庆祝
-                if (!hasCelebrated) {
-                    hasCelebrated = true;
-                    for (let i = 0; i < 10; i++) {
-                        setTimeout(() => {
-                            createFirework();
-                        }, i * 200);
-                    }
-                }
-                return;
-            }
-
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-            document.getElementById('days').textContent = days.toString().padStart(2, '0');
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-        }
-
-        // 放鞭炮效果
-        function createFirecrackerEffect(x, y) {
-            // 创建爆炸效果
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = 'firecracker-particle';
-                    
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = Math.random() * 100 + 50;
-                    const size = Math.random() * 6 + 4;
-                    
-                    particle.style.width = size + 'px';
-                    particle.style.height = size + 'px';
-                    particle.style.left = x + 'px';
-                    particle.style.top = y + 'px';
-                    particle.style.backgroundColor = i % 3 === 0 ? '#FFD700' : '#FF4500';
-                    
-                    document.body.appendChild(particle);
-                    
-                    // 动画
-                    const animation = particle.animate([
-                        {
-                            transform: `translate(0, 0)`,
-                            opacity: 1
-                        },
-                        {
-                            transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`,
-                            opacity: 0
-                        }
-                    ], {
-                        duration: 800,
-                        easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
-                    });
-                    
-                    animation.onfinish = () => {
-                        particle.remove();
-                    };
-                    
-                }, i * 20);
-            }
-            
-            // 创建中心爆炸效果
-            const explosion = document.createElement('div');
-            explosion.className = 'firecracker-explosion';
-            explosion.style.left = x + 'px';
-            explosion.style.top = y + 'px';
-            
-            document.body.appendChild(explosion);
-            
-            explosion.animate([
-                {
-                    transform: 'scale(0)',
-                    opacity: 1
-                },
-                {
-                    transform: 'scale(3)',
-                    opacity: 0
-                }
-            ], {
-                duration: 600,
-                easing: 'ease-out'
-            }).onfinish = () => {
-                explosion.remove();
-            };
-            
-            // 播放爆炸音效（使用音乐替代）
-            playExplosionSound();
-        }
-
-        // 播放爆炸音效
-        function playExplosionSound() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.5);
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
-        }
-
-        // 创建烟花效果
-        function createFirework() {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight * 0.5;
-            
-            const firework = document.createElement('div');
-            firework.className = 'firework';
-            firework.style.left = x + 'px';
-            firework.style.top = y + 'px';
-            
-            document.body.appendChild(firework);
-            
-            // 上升动画
-            firework.animate([
-                {
-                    transform: 'scale(0) translateY(0)',
-                    opacity: 1,
-                    background: 'radial-gradient(circle, #FFD700, transparent 30%)'
-                },
-                {
-                    transform: 'scale(1) translateY(-100px)',
-                    opacity: 0.8
-                }
-            ], {
-                duration: 800,
-                easing: 'ease-out'
-            }).onfinish = () => {
-                // 爆炸效果
-                for (let i = 0; i < 40; i++) {
-                    setTimeout(() => {
-                        const particle = document.createElement('div');
-                        particle.className = 'firecracker-particle';
-                        
-                        const angle = Math.random() * Math.PI * 2;
-                        const distance = Math.random() * 80 + 40;
-                        const size = Math.random() * 8 + 4;
-                        const color = i % 4 === 0 ? '#FFD700' : 
-                                     i % 4 === 1 ? '#FF4500' : 
-                                     i % 4 === 2 ? '#FF0000' : '#FFFFFF';
-                        
-                        particle.style.width = size + 'px';
-                        particle.style.height = size + 'px';
-                        particle.style.left = x + 'px';
-                        particle.style.top = (y - 100) + 'px';
-                        particle.style.backgroundColor = color;
-                        
-                        document.body.appendChild(particle);
-                        
-                        particle.animate([
-                            {
-                                transform: 'translate(0, 0) scale(1)',
-                                opacity: 1
-                            },
-                            {
-                                transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
-                                opacity: 0
-                            }
-                        ], {
-                            duration: 1200,
-                            easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
-                        }).onfinish = () => {
-                            particle.remove();
-                        };
-                    }, i * 20);
-                }
-                
-                firework.remove();
-            };
-        }
-
-        // 更新音乐按钮状态
-        function updateMusicButton() {
-            if (isMusicPlaying) {
-                musicIcon.textContent = '🎵';
-                musicText.textContent = '新春音乐';
-                musicControl.style.background = 'rgba(255, 215, 0, 0.3)';
-            } else {
-                musicIcon.textContent = '🔇';
-                musicText.textContent = '播放音乐';
-                musicControl.style.background = 'rgba(255, 215, 0, 0.1)';
-            }
-        }
-
-        // 切换音乐播放状态
-        function toggleMusic() {
-            isMusicPlaying = !isMusicPlaying;
-            
-            if (isMusicPlaying) {
-                bgMusic.play().catch(e => {
-                    console.log("音乐播放失败:", e);
-                    isMusicPlaying = false;
-                });
-            } else {
-                bgMusic.pause();
-            }
-            
-            updateMusicButton();
-        }
-
-        // 状态变量
-        let hasCelebrated = false;
-
-        // 事件监听
-        document.getElementById('firecrackerBtn').addEventListener('click', function(e) {
-            createFirecrackerEffect(e.clientX, e.clientY);
-            
-            // 额外放几个烟花
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => {
-                    createFirework();
-                }, i * 300);
-            }
-        });
-
-        musicControl.addEventListener('click', toggleMusic);
-
-        document.getElementById('creatorBtn').addEventListener('click', function() {
-            alert('创作者：Tang\n祝您2026年春节快乐！');
-        });
-
-        // 初始化
-        initDecorations();
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-        updateMusicButton();
-
-        // 页面加载完成后自动创建一些初始特效
-        window.addEventListener('load', () => {
-            // 初始放几个鞭炮增加节日气氛
-            setTimeout(() => {
-                for (let i = 0; i < 3; i++) {
-                    setTimeout(() => {
-                        createFirecrackerEffect(
-                            Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.1,
-                            Math.random() * window.innerHeight * 0.6 + window.innerHeight * 0.2
-                        );
-                    }, i * 500);
-                }
-            }, 1000);
-        });
-    </script>
-</body>
-</html>
+        function create
