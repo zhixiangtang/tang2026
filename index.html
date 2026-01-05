@@ -3,173 +3,607 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026年春节倒计时</title>
+    <title>2026年春节倒计时 - 喜迎新春</title>
     <style>
-        /* 基础样式重置与页面布局 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'STKaiti', sans-serif;
+            background: linear-gradient(180deg, #8B0000 0%, #B22222 30%, #FF4500 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-            color: #333;
-        }
-        .container {
-            max-width: 900px;
-            width: 100%;
+            color: #FFD700;
+            overflow-x: hidden;
+            position: relative;
         }
         
-        /* 标题区域样式 */
+        /* 灯笼装饰 */
+        .lantern {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(#FF0000, #8B0000);
+            border-radius: 50% 50% 40% 40%;
+            z-index: 1;
+            animation: sway 4s ease-in-out infinite;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5);
+        }
+        
+        .lantern:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            width: 20px;
+            height: 15px;
+            background: #FFD700;
+            border-radius: 5px;
+        }
+        
+        .lantern:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 25px;
+            width: 10px;
+            height: 20px;
+            background: #FFD700;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .lantern.left-top { top: 50px; left: 50px; }
+        .lantern.right-top { top: 50px; right: 50px; animation-delay: 2s; }
+        .lantern.left-bottom { bottom: 50px; left: 50px; animation-delay: 1s; }
+        .lantern.right-bottom { bottom: 50px; right: 50px; animation-delay: 3s; }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        /* 雪花/福字飘落 */
+        .snowflake, .fu-character {
+            position: absolute;
+            color: #FFD700;
+            font-size: 20px;
+            opacity: 0.7;
+            z-index: 1;
+            user-select: none;
+        }
+        
+        .fu-character {
+            font-size: 24px;
+            font-weight: bold;
+            opacity: 0.6;
+        }
+        
+        /* 金元宝装饰 */
+        .gold-coin {
+            position: absolute;
+            width: 30px;
+            height: 15px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            opacity: 0.5;
+            z-index: 1;
+        }
+        
+        /* 音乐控制 */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .music-btn {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #FFD700;
+            color: #FFD700;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+        
+        .music-btn:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: scale(1.05);
+        }
+        
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 标题区域 */
         .header {
             text-align: center;
-            margin-bottom: 40px;
-        }
-        .main-title {
-            font-size: 3.5rem;
-            color: #e53935;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        .subtitle {
-            font-size: 1.4rem;
-            color: #666;
-            font-weight: normal;
+            margin-bottom: 50px;
+            position: relative;
         }
         
-        /* 倒计时卡片样式 */
-        .countdown-container {
-            background-color: rgba(255, 255, 255, 0.92);
-            border-radius: 25px;
-            padding: 50px 40px;
-            box-shadow: 0 15px 35px rgba(233, 76, 71, 0.15);
-            margin-bottom: 40px;
-            border: 1px solid rgba(255, 150, 150, 0.2);
+        .main-title {
+            font-size: 4.5rem;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 
+                0 0 10px #FF0000,
+                0 0 20px #FF4500,
+                0 0 30px #FF8C00;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+            position: relative;
+            display: inline-block;
         }
+        
+        .main-title:after {
+            content: '🐉';
+            font-size: 3rem;
+            position: absolute;
+            right: -60px;
+            top: 10px;
+            animation: dragonFloat 3s ease-in-out infinite;
+        }
+        
+        .main-title:before {
+            content: '🧧';
+            font-size: 3rem;
+            position: absolute;
+            left: -60px;
+            top: 10px;
+            animation: redPacketFloat 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 10px #FF0000, 0 0 20px #FF4500; }
+            to { text-shadow: 0 0 20px #FF0000, 0 0 40px #FF4500, 0 0 60px #FF8C00; }
+        }
+        
+        @keyframes dragonFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        
+        @keyframes redPacketFloat {
+            0%, 100% { transform: translateY(0) rotate(-10deg); }
+            50% { transform: translateY(-10px) rotate(10deg); }
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            color: #FFF;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .year-title {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 倒计时区域 */
+        .countdown-container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 30px;
+            padding: 50px 40px;
+            margin-bottom: 50px;
+            border: 3px solid #FFD700;
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.5),
+                inset 0 0 30px rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-container:before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF0000, #FFD700, #FF0000);
+            border-radius: 32px;
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+        }
+        
+        @keyframes borderGlow {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
         .countdown-title {
             text-align: center;
-            font-size: 1.8rem;
-            color: #d32f2f;
-            margin-bottom: 30px;
-        }
-        .countdown-display {
+            font-size: 2.2rem;
+            color: #FFD700;
+            margin-bottom: 40px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 25px;
-        }
-        .time-unit {
-            background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
-            border-radius: 20px;
-            padding: 25px 15px;
-            min-width: 150px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(255, 100, 100, 0.2);
-            transition: transform 0.3s ease;
-        }
-        .time-unit:hover {
-            transform: translateY(-8px);
-        }
-        .number {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #b71c1c;
-            line-height: 1;
-            margin-bottom: 8px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        .label {
-            font-size: 1.2rem;
-            color: #7c0a02;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            gap: 15px;
         }
         
-        /* 假期信息面板样式 */
+        .countdown-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .time-unit {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.9), rgba(178, 34, 34, 0.9));
+            border-radius: 20px;
+            padding: 30px 15px;
+            text-align: center;
+            border: 2px solid #FFD700;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            animation: unitPulse 2s infinite alternate;
+        }
+        
+        .time-unit:nth-child(1) { animation-delay: 0s; }
+        .time-unit:nth-child(2) { animation-delay: 0.5s; }
+        .time-unit:nth-child(3) { animation-delay: 1s; }
+        .time-unit:nth-child(4) { animation-delay: 1.5s; }
+        
+        @keyframes unitPulse {
+            from { transform: scale(1); box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3); }
+            to { transform: scale(1.03); box-shadow: 0 10px 25px rgba(255, 215, 0, 0.5); }
+        }
+        
+        .number {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #FFF;
+            text-shadow: 0 0 10px #FF4500;
+            margin-bottom: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .label {
+            font-size: 1.3rem;
+            color: #FFD700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* 信息面板 */
         .info-panels {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
         }
+        
         .info-card {
-            background: white;
+            background: rgba(0, 0, 0, 0.7);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border: 2px solid #FFD700;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .info-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF0000, #FFD700, #FF0000);
+        }
+        
         .info-card h3 {
-            color: #e53935;
-            font-size: 1.6rem;
+            color: #FFD700;
+            font-size: 1.8rem;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px dashed #ffcdd2;
+            border-bottom: 2px dashed #FFD700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+        
         .info-card p {
-            line-height: 1.7;
-            color: #555;
-            margin-bottom: 12px;
+            line-height: 1.8;
+            color: #FFF;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
         }
+        
         .highlight {
-            color: #e53935;
+            color: #FFD700;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
+        }
+        
+        /* 鞭炮按钮 */
+        .firecracker-btn {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .firecracker {
+            background: linear-gradient(#FF0000, #8B0000);
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .firecracker:hover {
+            background: linear-gradient(#FF4500, #B22222);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+        
+        /* 鞭炮动画元素 */
+        .firecracker-particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #FF4500, #FF0000);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 0 10px #FFD700;
+        }
+        
+        .firecracker-explosion {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #FFD700, #FF4500, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* 烟花效果 */
+        .firework {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* 春联效果 */
+        .spring-couplet {
+            position: absolute;
+            width: 100px;
+            height: 300px;
+            background: linear-gradient(#8B0000, #B22222);
+            color: #FFD700;
+            font-size: 1.5rem;
+            writing-mode: vertical-rl;
+            text-align: center;
+            padding: 20px 5px;
+            border: 3px solid #FFD700;
+            z-index: 1;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .spring-couplet.left {
+            left: 20px;
+            top: 150px;
+            transform: rotate(-5deg);
+        }
+        
+        .spring-couplet.right {
+            right: 20px;
+            top: 150px;
+            transform: rotate(5deg);
         }
         
         /* 响应式设计 */
-        @media (max-width: 768px) {
-            .main-title { font-size: 2.8rem; }
-            .subtitle { font-size: 1.2rem; }
-            .time-unit { min-width: 120px; padding: 20px 10px; }
-            .number { font-size: 3.2rem; }
-            .info-panels { grid-template-columns: 1fr; }
+        @media (max-width: 992px) {
+            .countdown-display {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .main-title {
+                font-size: 3.5rem;
+            }
+            
+            .spring-couplet {
+                display: none;
+            }
         }
+        
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.8rem;
+            }
+            
+            .main-title:before,
+            .main-title:after {
+                display: none;
+            }
+            
+            .countdown-display {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .info-panels {
+                grid-template-columns: 1fr;
+            }
+            
+            .lantern {
+                transform: scale(0.7);
+            }
+            
+            .number {
+                font-size: 3.5rem;
+            }
+        }
+        
         @media (max-width: 480px) {
-            .main-title { font-size: 2.2rem; }
-            .countdown-display { gap: 15px; }
-            .time-unit { min-width: 100px; }
-            .number { font-size: 2.5rem; }
+            .main-title {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.3rem;
+            }
+            
+            .countdown-title {
+                font-size: 1.8rem;
+            }
+            
+            .number {
+                font-size: 2.8rem;
+            }
+            
+            .music-btn {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
+        
+        /* 飘落动画 */
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 创作者按钮 */
+        .creator-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        #creatorBtn {
+            background: rgba(255, 215, 0, 0.8);
+            color: #8B0000;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        #creatorBtn:hover {
+            background: rgba(255, 215, 0, 1);
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
+    <!-- 音乐控制 -->
+    <div class="music-control">
+        <button class="music-btn" id="musicControl">
+            <span id="musicIcon">🎵</span>
+            <span id="musicText">新春音乐</span>
+        </button>
+    </div>
+    
+    <!-- 灯笼装饰 -->
+    <div class="lantern left-top"></div>
+    <div class="lantern right-top"></div>
+    <div class="lantern left-bottom"></div>
+    <div class="lantern right-bottom"></div>
+    
+    <!-- 春联 -->
+    <div class="spring-couplet left">
+        <div>新</div>
+        <div>春</div>
+        <div>大</div>
+        <div>吉</div>
+    </div>
+    
+    <div class="spring-couplet right">
+        <div>万</div>
+        <div>事</div>
+        <div>如</div>
+        <div>意</div>
+    </div>
+    
+    <!-- 主内容 -->
     <div class="container">
         <header class="header">
             <h1 class="main-title">2026年春节倒计时</h1>
-            <h2 class="subtitle">新春将至，福满人间</h2>
+            <h2 class="subtitle">龙年大吉 · 喜迎新春</h2>
+            <div class="year-title">农历丙午年 · 春节</div>
         </header>
 
         <main>
-            <!-- 倒计时显示区域 -->
+            <!-- 倒计时区域 -->
             <section class="countdown-container">
-                <h2 class="countdown-title">春节倒计时</h2>
+                <h2 class="countdown-title">
+                    <span>⏰</span> 距离2026年春节还有 <span>⏰</span>
+                </h2>
                 <div class="countdown-display">
                     <div class="time-unit">
-                        <div id="days" class="number">00</div>
+                        <div id="days" class="number">365</div>
                         <div class="label">天</div>
                     </div>
                     <div class="time-unit">
-                        <div id="hours" class="number">00</div>
-                        <div class="label">时</div>
+                        <div id="hours" class="number">23</div>
+                        <div class="label">小时</div>
                     </div>
                     <div class="time-unit">
-                        <div id="minutes" class="number">00</div>
-                        <div class="label">分</div>
+                        <div id="minutes" class="number">59</div>
+                        <div class="label">分钟</div>
                     </div>
                     <div class="time-unit">
-                        <div id="seconds" class="number">00</div>
-                        <div class="label">秒</div>
+                        <div id="seconds" class="number">59</div>
+                        <div class="label">秒钟</div>
                     </div>
                 </div>
             </section>
 
-            <!-- 假期信息区域 -->
+            <!-- 信息面板 -->
             <section class="info-panels">
                 <div class="info-card">
                     <h3>📅 放假安排</h3>
@@ -179,100 +613,376 @@
                     <p>调休上班：2月14日（周六）、2月28日（周六）。</p>
                 </div>
                 <div class="info-card">
-                    <h3>✨ 新春小贴士</h3>
-                    <p>• 春节是阖家团圆的日子，记得提前规划好行程。</p>
-                    <p>• 假期期间高速公路对小型客车实行免费通行。</p>
-                    <p>• 鼓励结合带薪年休假形成更长假期，实现错峰出行。</p>
-                    <p>• 出行与欢聚时，请注意安全，度过一个祥和平安的假期。</p>
+                    <h3>✨ 新春习俗</h3>
+                    <p>• 🧧 贴春联：辞旧迎新，增加节日气氛</p>
+                    <p>• 🎇 放鞭炮：驱邪避害，迎接新年</p>
+                    <p>• 🥟 吃饺子：寓意更岁交子，吉祥如意</p>
+                    <p>• 🧨 守岁：辞旧岁，迎新年</p>
+                    <p>• 🎁 拜年：互致问候，祝福安康</p>
                 </div>
             </section>
+            
+            <!-- 放鞭炮按钮 -->
+            <div class="firecracker-btn">
+                <button class="firecracker" id="firecrackerBtn">
+                    <span>🧨</span> 点击放鞭炮迎新年 <span>🧨</span>
+                </button>
+            </div>
         </main>
     </div>
-
-    <!-- 创作者信息按钮 -->
+    
+    <!-- 创作者按钮 -->
     <div class="creator-info">
         <button id="creatorBtn">创作者</button>
     </div>
 
+    <!-- 音乐 -->
+    <audio id="backgroundMusic" loop>
+        <source src="newyear.mp3" type="audio/mpeg">
+        您的浏览器不支持音频元素
+    </audio>
+
     <script>
         // 定义2026年春节日期（2月15日，注意月份从0开始计数）
-        const springFestival2026 = new Date(2026, 1, 15, 0, 0, 0); // 2026年2月15日 00:00:00
+        const springFestival2026 = new Date(2026, 1, 15, 0, 0, 0);
 
+        // 音乐控制
+        const bgMusic = document.getElementById('backgroundMusic');
+        const musicControl = document.getElementById('musicControl');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+        let isMusicPlaying = true;
+
+        // 初始化背景装饰
+        function initDecorations() {
+            // 创建雪花/福字飘落
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createFallingElement();
+                }, i * 300);
+            }
+
+            // 创建金元宝装饰
+            for (let i = 0; i < 15; i++) {
+                createGoldCoin(i);
+            }
+
+            // 自动开始播放音乐
+            bgMusic.play().catch(e => {
+                console.log("音乐自动播放失败，需要用户交互");
+                isMusicPlaying = false;
+                updateMusicButton();
+            });
+        }
+
+        // 创建飘落元素
+        function createFallingElement() {
+            const element = document.createElement('div');
+            const isFu = Math.random() > 0.5;
+            
+            if (isFu) {
+                element.className = 'fu-character';
+                element.textContent = '福';
+                element.style.fontSize = Math.random() * 20 + 20 + 'px';
+            } else {
+                element.className = 'snowflake';
+                element.textContent = '❄';
+                element.style.fontSize = Math.random() * 15 + 15 + 'px';
+            }
+            
+            element.style.left = Math.random() * 100 + 'vw';
+            element.style.animation = `fall ${Math.random() * 10 + 10}s linear infinite`;
+            element.style.animationDelay = Math.random() * 5 + 's';
+            
+            document.body.appendChild(element);
+            
+            // 移除旧元素保持性能
+            setTimeout(() => {
+                if (element.parentNode) {
+                    element.remove();
+                    createFallingElement();
+                }
+            }, 15000);
+        }
+
+        // 创建金元宝
+        function createGoldCoin(index) {
+            const coin = document.createElement('div');
+            coin.className = 'gold-coin';
+            coin.style.left = Math.random() * 100 + 'vw';
+            coin.style.top = Math.random() * 100 + 'vh';
+            coin.style.opacity = Math.random() * 0.3 + 0.2;
+            coin.style.transform = `rotate(${Math.random() * 360}deg)`;
+            coin.style.animation = `sway ${Math.random() * 8 + 4}s ease-in-out infinite`;
+            coin.style.animationDelay = index * 0.5 + 's';
+            
+            document.body.appendChild(coin);
+        }
+
+        // 更新倒计时
         function updateCountdown() {
             const now = new Date();
-            const timeDiff = springFestival2026 - now; // 计算时间差（毫秒）
+            const timeDiff = springFestival2026 - now;
 
-            // 如果春节已过，则显示祝福语并停止计时
             if (timeDiff <= 0) {
                 document.getElementById('days').textContent = '00';
                 document.getElementById('hours').textContent = '00';
                 document.getElementById('minutes').textContent = '00';
                 document.getElementById('seconds').textContent = '00';
-                document.querySelector('.countdown-title').textContent = '🎉 新春快乐！龙年大吉！ 🎉';
+                document.querySelector('.countdown-title').innerHTML = '<span>🎉</span> 新春快乐！龙年大吉！ <span>🎉</span>';
+                
+                // 自动放烟花庆祝
+                if (!hasCelebrated) {
+                    hasCelebrated = true;
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(() => {
+                            createFirework();
+                        }, i * 200);
+                    }
+                }
                 return;
             }
 
-            // 计算剩余的天、时、分、秒
             const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-            // 更新页面上的数字显示
             document.getElementById('days').textContent = days.toString().padStart(2, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
         }
 
-        // 页面加载后立即更新一次，然后每秒更新一次
+        // 放鞭炮效果
+        function createFirecrackerEffect(x, y) {
+            // 创建爆炸效果
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'firecracker-particle';
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 100 + 50;
+                    const size = Math.random() * 6 + 4;
+                    
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    particle.style.backgroundColor = i % 3 === 0 ? '#FFD700' : '#FF4500';
+                    
+                    document.body.appendChild(particle);
+                    
+                    // 动画
+                    const animation = particle.animate([
+                        {
+                            transform: `translate(0, 0)`,
+                            opacity: 1
+                        },
+                        {
+                            transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`,
+                            opacity: 0
+                        }
+                    ], {
+                        duration: 800,
+                        easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                    });
+                    
+                    animation.onfinish = () => {
+                        particle.remove();
+                    };
+                    
+                }, i * 20);
+            }
+            
+            // 创建中心爆炸效果
+            const explosion = document.createElement('div');
+            explosion.className = 'firecracker-explosion';
+            explosion.style.left = x + 'px';
+            explosion.style.top = y + 'px';
+            
+            document.body.appendChild(explosion);
+            
+            explosion.animate([
+                {
+                    transform: 'scale(0)',
+                    opacity: 1
+                },
+                {
+                    transform: 'scale(3)',
+                    opacity: 0
+                }
+            ], {
+                duration: 600,
+                easing: 'ease-out'
+            }).onfinish = () => {
+                explosion.remove();
+            };
+            
+            // 播放爆炸音效（使用音乐替代）
+            playExplosionSound();
+        }
+
+        // 播放爆炸音效
+        function playExplosionSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // 创建烟花效果
+        function createFirework() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.5;
+            
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = x + 'px';
+            firework.style.top = y + 'px';
+            
+            document.body.appendChild(firework);
+            
+            // 上升动画
+            firework.animate([
+                {
+                    transform: 'scale(0) translateY(0)',
+                    opacity: 1,
+                    background: 'radial-gradient(circle, #FFD700, transparent 30%)'
+                },
+                {
+                    transform: 'scale(1) translateY(-100px)',
+                    opacity: 0.8
+                }
+            ], {
+                duration: 800,
+                easing: 'ease-out'
+            }).onfinish = () => {
+                // 爆炸效果
+                for (let i = 0; i < 40; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.className = 'firecracker-particle';
+                        
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = Math.random() * 80 + 40;
+                        const size = Math.random() * 8 + 4;
+                        const color = i % 4 === 0 ? '#FFD700' : 
+                                     i % 4 === 1 ? '#FF4500' : 
+                                     i % 4 === 2 ? '#FF0000' : '#FFFFFF';
+                        
+                        particle.style.width = size + 'px';
+                        particle.style.height = size + 'px';
+                        particle.style.left = x + 'px';
+                        particle.style.top = (y - 100) + 'px';
+                        particle.style.backgroundColor = color;
+                        
+                        document.body.appendChild(particle);
+                        
+                        particle.animate([
+                            {
+                                transform: 'translate(0, 0) scale(1)',
+                                opacity: 1
+                            },
+                            {
+                                transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
+                                opacity: 0
+                            }
+                        ], {
+                            duration: 1200,
+                            easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                        }).onfinish = () => {
+                            particle.remove();
+                        };
+                    }, i * 20);
+                }
+                
+                firework.remove();
+            };
+        }
+
+        // 更新音乐按钮状态
+        function updateMusicButton() {
+            if (isMusicPlaying) {
+                musicIcon.textContent = '🎵';
+                musicText.textContent = '新春音乐';
+                musicControl.style.background = 'rgba(255, 215, 0, 0.3)';
+            } else {
+                musicIcon.textContent = '🔇';
+                musicText.textContent = '播放音乐';
+                musicControl.style.background = 'rgba(255, 215, 0, 0.1)';
+            }
+        }
+
+        // 切换音乐播放状态
+        function toggleMusic() {
+            isMusicPlaying = !isMusicPlaying;
+            
+            if (isMusicPlaying) {
+                bgMusic.play().catch(e => {
+                    console.log("音乐播放失败:", e);
+                    isMusicPlaying = false;
+                });
+            } else {
+                bgMusic.pause();
+            }
+            
+            updateMusicButton();
+        }
+
+        // 状态变量
+        let hasCelebrated = false;
+
+        // 事件监听
+        document.getElementById('firecrackerBtn').addEventListener('click', function(e) {
+            createFirecrackerEffect(e.clientX, e.clientY);
+            
+            // 额外放几个烟花
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createFirework();
+                }, i * 300);
+            }
+        });
+
+        musicControl.addEventListener('click', toggleMusic);
+
+        document.getElementById('creatorBtn').addEventListener('click', function() {
+            alert('创作者：Tang\n祝您2026年春节快乐！');
+        });
+
+        // 初始化
+        initDecorations();
         updateCountdown();
         setInterval(updateCountdown, 1000);
+        updateMusicButton();
 
-        // 创作者信息显示功能
-        document.getElementById('creatorBtn').addEventListener('click', function() {
-            alert('创作者：TangZhiXiang');
+        // 页面加载完成后自动创建一些初始特效
+        window.addEventListener('load', () => {
+            // 初始放几个鞭炮增加节日气氛
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        createFirecrackerEffect(
+                            Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.1,
+                            Math.random() * window.innerHeight * 0.6 + window.innerHeight * 0.2
+                        );
+                    }, i * 500);
+                }
+            }, 1000);
         });
     </script>
-
-    <style>
-        /* 创作者按钮样式 */
-        .creator-info {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-        }
-        
-        #creatorBtn {
-            background: rgba(229, 57, 53, 0.9);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(229, 57, 53, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        #creatorBtn:hover {
-            background: rgba(229, 57, 53, 1);
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(229, 57, 53, 0.4);
-        }
-        
-        @media (max-width: 768px) {
-            .creator-info {
-                bottom: 20px;
-                right: 20px;
-            }
-            #creatorBtn {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-        }
-    </style>
 </body>
 </html>
