@@ -448,29 +448,31 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
+            gap: 8px;
+            margin-bottom: 20px;
         }
         
         .calendar-day-header {
             text-align: center;
-            padding: 15px 5px;
+            padding: 12px 5px;
             color: #FFD700;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             background: rgba(255, 69, 0, 0.3);
-            border-radius: 10px;
+            border-radius: 8px;
         }
         
         .calendar-day {
             aspect-ratio: 1;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             transition: all 0.3s;
+            padding: 5px;
         }
         
         .calendar-day:hover {
@@ -479,15 +481,16 @@
         }
         
         .day-number {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #FFF;
             font-weight: bold;
+            margin-bottom: 2px;
         }
         
         .day-label {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: #FFD700;
-            margin-top: 5px;
+            text-align: center;
         }
         
         .day-other-month {
@@ -496,39 +499,43 @@
         
         .day-today {
             background: rgba(255, 69, 0, 0.5);
-            box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+            box-shadow: 0 0 8px rgba(255, 69, 0, 0.5);
         }
         
         .day-spring-festival {
             background: linear-gradient(135deg, #FF0000, #FF4500);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            box-shadow: 0 0 12px rgba(255, 0, 0, 0.7);
             position: relative;
         }
         
         .day-spring-festival:after {
             content: '🐎';
             position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 1rem;
+            top: 2px;
+            right: 2px;
+            font-size: 0.8rem;
         }
         
         .festival-marker {
             position: absolute;
-            bottom: 5px;
-            font-size: 0.7rem;
+            bottom: 2px;
+            font-size: 0.6rem;
             color: #FFD700;
             background: rgba(0, 0, 0, 0.5);
-            padding: 2px 5px;
-            border-radius: 5px;
+            padding: 1px 3px;
+            border-radius: 3px;
+            max-width: 90%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
         /* 月份指示器 */
         .month-indicator {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 10px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
         
@@ -536,11 +543,13 @@
             background: rgba(0, 0, 0, 0.5);
             color: #FFD700;
             border: 1px solid #FFD700;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            min-width: 60px;
+            text-align: center;
         }
         
         .month-btn:hover {
@@ -549,7 +558,7 @@
         
         .month-btn.active {
             background: linear-gradient(45deg, #FF0000, #FF4500);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
         }
         
         /* 鞭炮按钮 */
@@ -718,6 +727,14 @@
             
             .calendar-title {
                 font-size: 1.5rem;
+            }
+            
+            .day-number {
+                font-size: 1.1rem;
+            }
+            
+            .day-label {
+                font-size: 0.6rem;
             }
         }
         
@@ -918,6 +935,7 @@
     <!-- 音乐 -->
     <audio id="backgroundMusic" loop>
         <source src="https://assets.mixkit.co/music/preview/mixkit-happy-new-year-2023-1138.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
         您的浏览器不支持音频元素
     </audio>
 
@@ -934,37 +952,81 @@
         const musicControl = document.getElementById('musicControl');
         const musicIcon = document.getElementById('musicIcon');
         const musicText = document.getElementById('musicText');
-        let isMusicPlaying = true;
+        let isMusicPlaying = false;
+
+        // 重要节日数据
+        const festivals2026 = {
+            0: [{day: 1, name: "元旦"}], // 1月
+            1: [{day: 14, name: "情人节"}, {day: 15, name: "春节"}], // 2月
+            2: [{day: 3, name: "元宵节"}, {day: 8, name: "妇女节"}], // 3月
+            3: [{day: 4, name: "清明节"}], // 4月
+            4: [{day: 1, name: "劳动节"}, {day: 4, name: "青年节"}], // 5月
+            5: [{day: 1, name: "儿童节"}, {day: 19, name: "端午节"}], // 6月
+            6: [{day: 1, name: "建党节"}], // 7月
+            7: [{day: 1, name: "建军节"}], // 8月
+            8: [{day: 10, name: "教师节"}, {day: 25, name: "中秋节"}], // 9月
+            9: [{day: 1, name: "国庆节"}, {day: 4, name: "重阳节"}], // 10月
+            10: [], // 11月
+            11: [{day: 24, name: "平安夜"}, {day: 25, name: "圣诞节"}] // 12月
+        };
 
         // 自动播放音乐的尝试
         function autoPlayMusic() {
-            // 创建用户交互事件以触发自动播放
-            document.addEventListener('click', function initAudio() {
-                bgMusic.play().then(() => {
+            // 设置音量
+            bgMusic.volume = 0.5;
+            
+            // 尝试自动播放
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
                     console.log("音乐自动播放成功");
                     isMusicPlaying = true;
                     updateMusicButton();
-                }).catch(e => {
-                    console.log("音乐自动播放需要用户交互");
-                    // 显示提示让用户知道需要点击才能播放音乐
-                    musicControl.style.background = 'rgba(255, 0, 0, 0.3)';
-                    musicText.textContent = '点击播放音乐';
+                }).catch(error => {
+                    console.log("音乐自动播放失败，等待用户交互", error);
+                    isMusicPlaying = false;
+                    updateMusicButton();
+                    
+                    // 添加点击事件来启动音乐
+                    document.addEventListener('click', function startMusicOnClick() {
+                        bgMusic.play().then(() => {
+                            console.log("用户交互后音乐播放成功");
+                            isMusicPlaying = true;
+                            updateMusicButton();
+                            document.removeEventListener('click', startMusicOnClick);
+                        });
+                    }, { once: true });
                 });
-                
-                // 移除事件监听器，只执行一次
-                document.removeEventListener('click', initAudio);
-            });
-            
-            // 尝试自动播放（现代浏览器通常需要用户交互）
-            bgMusic.play().then(() => {
-                console.log("音乐自动播放成功");
-                isMusicPlaying = true;
-                updateMusicButton();
-            }).catch(e => {
-                console.log("音乐自动播放失败，等待用户交互");
+            }
+        }
+
+        // 更新音乐按钮状态
+        function updateMusicButton() {
+            if (isMusicPlaying) {
+                musicIcon.textContent = '🎵';
+                musicText.textContent = '播放中';
+                musicControl.style.background = 'rgba(255, 215, 0, 0.3)';
+            } else {
+                musicIcon.textContent = '🔇';
+                musicText.textContent = '播放音乐';
+                musicControl.style.background = 'rgba(255, 215, 0, 0.1)';
+            }
+        }
+
+        // 切换音乐播放状态
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
                 isMusicPlaying = false;
-                updateMusicButton();
-            });
+            } else {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                }).catch(e => {
+                    console.log("音乐播放失败:", e);
+                });
+            }
+            updateMusicButton();
         }
 
         // 初始化背景装饰
@@ -1037,4 +1099,483 @@
         }
 
         // 创建金元宝
-        function create
+        function createGoldCoin(index) {
+            const coin = document.createElement('div');
+            coin.className = 'gold-coin';
+            coin.style.left = Math.random() * 100 + 'vw';
+            coin.style.top = Math.random() * 100 + 'vh';
+            coin.style.opacity = Math.random() * 0.3 + 0.2;
+            coin.style.transform = `rotate(${Math.random() * 360}deg)`;
+            coin.style.animation = `sway ${Math.random() * 8 + 4}s ease-in-out infinite`;
+            coin.style.animationDelay = index * 0.5 + 's';
+            
+            document.body.appendChild(coin);
+        }
+
+        // 更新倒计时
+        function updateCountdown() {
+            const now = new Date();
+            const timeDiff = springFestival2026 - now;
+
+            if (timeDiff <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                document.querySelector('.countdown-title').innerHTML = '<span>🎉</span> 新春快乐！马年大吉！ <span>🎉</span>';
+                
+                // 自动放烟花庆祝
+                if (!hasCelebrated) {
+                    hasCelebrated = true;
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(() => {
+                            createFirework();
+                        }, i * 200);
+                    }
+                }
+                return;
+            }
+
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // 放鞭炮效果
+        function createFirecrackerEffect(x, y) {
+            // 创建爆炸效果
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'firecracker-particle';
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 100 + 50;
+                    const size = Math.random() * 6 + 4;
+                    
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    particle.style.backgroundColor = i % 3 === 0 ? '#FFD700' : '#FF4500';
+                    
+                    document.body.appendChild(particle);
+                    
+                    // 动画
+                    const animation = particle.animate([
+                        {
+                            transform: `translate(0, 0)`,
+                            opacity: 1
+                        },
+                        {
+                            transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`,
+                            opacity: 0
+                        }
+                    ], {
+                        duration: 800,
+                        easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                    });
+                    
+                    animation.onfinish = () => {
+                        particle.remove();
+                    };
+                    
+                }, i * 20);
+            }
+            
+            // 创建中心爆炸效果
+            const explosion = document.createElement('div');
+            explosion.className = 'firecracker-explosion';
+            explosion.style.left = x + 'px';
+            explosion.style.top = y + 'px';
+            
+            document.body.appendChild(explosion);
+            
+            explosion.animate([
+                {
+                    transform: 'scale(0)',
+                    opacity: 1
+                },
+                {
+                    transform: 'scale(3)',
+                    opacity: 0
+                }
+            ], {
+                duration: 600,
+                easing: 'ease-out'
+            }).onfinish = () => {
+                explosion.remove();
+            };
+            
+            // 播放爆炸音效
+            playExplosionSound();
+        }
+
+        // 播放爆炸音效
+        function playExplosionSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // 创建多个音调模拟爆炸声
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    // 随机音高
+                    const frequency = 200 + Math.random() * 600;
+                    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+                    
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                }, i * 50);
+            }
+        }
+
+        // 创建烟花效果
+        function createFirework() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.5;
+            
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = x + 'px';
+            firework.style.top = y + 'px';
+            
+            document.body.appendChild(firework);
+            
+            // 上升动画
+            firework.animate([
+                {
+                    transform: 'scale(0) translateY(0)',
+                    opacity: 1,
+                    background: 'radial-gradient(circle, #FFD700, transparent 30%)'
+                },
+                {
+                    transform: 'scale(1) translateY(-100px)',
+                    opacity: 0.8
+                }
+            ], {
+                duration: 800,
+                easing: 'ease-out'
+            }).onfinish = () => {
+                // 爆炸效果
+                for (let i = 0; i < 40; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.className = 'firecracker-particle';
+                        
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = Math.random() * 80 + 40;
+                        const size = Math.random() * 8 + 4;
+                        const color = i % 4 === 0 ? '#FFD700' : 
+                                     i % 4 === 1 ? '#FF4500' : 
+                                     i % 4 === 2 ? '#FF0000' : '#FFFFFF';
+                        
+                        particle.style.width = size + 'px';
+                        particle.style.height = size + 'px';
+                        particle.style.left = x + 'px';
+                        particle.style.top = (y - 100) + 'px';
+                        particle.style.backgroundColor = color;
+                        
+                        document.body.appendChild(particle);
+                        
+                        particle.animate([
+                            {
+                                transform: 'translate(0, 0) scale(1)',
+                                opacity: 1
+                            },
+                            {
+                                transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
+                                opacity: 0
+                            }
+                        ], {
+                            duration: 1200,
+                            easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                        }).onfinish = () => {
+                            particle.remove();
+                        };
+                    }, i * 20);
+                }
+                
+                firework.remove();
+            };
+        }
+
+        // 日历相关函数
+        function renderCalendar(year, month) {
+            const calendarGrid = document.getElementById('calendar-grid');
+            const monthYearElement = document.getElementById('current-month-year');
+            
+            // 清空日历
+            calendarGrid.innerHTML = '';
+            
+            // 更新标题
+            const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', 
+                               '七月', '八月', '九月', '十月', '十一月', '十二月'];
+            monthYearElement.textContent = `${year}年${monthNames[month]}`;
+            
+            // 星期标题
+            const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+            dayNames.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day-header';
+                dayHeader.textContent = day;
+                calendarGrid.appendChild(dayHeader);
+            });
+            
+            // 获取当月第一天是星期几
+            const firstDay = new Date(year, month, 1);
+            const firstDayWeekday = firstDay.getDay();
+            
+            // 获取当月天数
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            
+            // 获取上个月的天数
+            const prevMonthLastDay = new Date(year, month, 0);
+            const daysInPrevMonth = prevMonthLastDay.getDate();
+            
+            // 填充上个月的日期
+            for (let i = firstDayWeekday - 1; i >= 0; i--) {
+                const day = daysInPrevMonth - i;
+                const dayElement = createDayElement(year, month - 1, day, true);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // 填充当月的日期
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const isToday = today.getFullYear() === year && 
+                               today.getMonth() === month && 
+                               today.getDate() === day;
+                
+                const isSpringFestival = year === 2026 && month === 1 && day === 15;
+                
+                const dayElement = createDayElement(year, month, day, false, isToday, isSpringFestival);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // 计算下个月需要填充的日期
+            const totalCells = 42; // 6行×7列
+            const cellsFilled = firstDayWeekday + daysInMonth;
+            const nextMonthDays = totalCells - cellsFilled;
+            
+            // 填充下个月的日期
+            for (let day = 1; day <= nextMonthDays; day++) {
+                const dayElement = createDayElement(year, month + 1, day, true);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // 更新月份指示器
+            updateMonthIndicator(year, month);
+        }
+        
+        function createDayElement(year, month, day, isOtherMonth, isToday = false, isSpringFestival = false) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            
+            if (isOtherMonth) {
+                dayElement.classList.add('day-other-month');
+            }
+            
+            if (isToday) {
+                dayElement.classList.add('day-today');
+            }
+            
+            if (isSpringFestival) {
+                dayElement.classList.add('day-spring-festival');
+            }
+            
+            // 日期数字
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'day-number';
+            dayNumber.textContent = day;
+            dayElement.appendChild(dayNumber);
+            
+            // 农历和节日标记
+            const lunarInfo = getLunarInfo(year, month, day);
+            if (lunarInfo) {
+                const dayLabel = document.createElement('div');
+                dayLabel.className = 'day-label';
+                dayLabel.textContent = lunarInfo;
+                dayElement.appendChild(dayLabel);
+            }
+            
+            // 节日标记
+            const festival = getFestivalInfo(month, day);
+            if (festival) {
+                const festivalMarker = document.createElement('div');
+                festivalMarker.className = 'festival-marker';
+                festivalMarker.textContent = festival;
+                dayElement.appendChild(festivalMarker);
+            }
+            
+            return dayElement;
+        }
+        
+        function getLunarInfo(year, month, day) {
+            // 简化版的农历信息，实际应该使用农历算法
+            // 这里只返回春节的农历信息
+            if (year === 2026 && month === 1 && day === 15) {
+                return "初一";
+            }
+            return null;
+        }
+        
+        function getFestivalInfo(month, day) {
+            const monthFestivals = festivals2026[month];
+            if (monthFestivals) {
+                const festival = monthFestivals.find(f => f.day === day);
+                return festival ? festival.name : null;
+            }
+            return null;
+        }
+        
+        function updateMonthIndicator(year, month) {
+            const monthIndicator = document.getElementById('month-indicator');
+            monthIndicator.innerHTML = '';
+            
+            const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', 
+                               '7月', '8月', '9月', '10月', '11月', '12月'];
+            
+            monthNames.forEach((name, index) => {
+                const monthBtn = document.createElement('button');
+                monthBtn.className = 'month-btn';
+                if (index === month && year === 2026) {
+                    monthBtn.classList.add('active');
+                }
+                monthBtn.textContent = name;
+                monthBtn.dataset.month = index;
+                monthBtn.addEventListener('click', () => {
+                    currentMonth = index;
+                    renderCalendar(currentYear, currentMonth);
+                });
+                monthIndicator.appendChild(monthBtn);
+            });
+        }
+
+        // 状态变量
+        let hasCelebrated = false;
+
+        // 初始化日历
+        function initCalendar() {
+            renderCalendar(currentYear, currentMonth);
+            
+            // 日历导航事件
+            document.getElementById('prev-year').addEventListener('click', () => {
+                currentYear--;
+                renderCalendar(currentYear, currentMonth);
+            });
+            
+            document.getElementById('prev-month').addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                renderCalendar(currentYear, currentMonth);
+            });
+            
+            document.getElementById('today-btn').addEventListener('click', () => {
+                const today = new Date();
+                currentYear = today.getFullYear();
+                currentMonth = today.getMonth();
+                renderCalendar(currentYear, currentMonth);
+            });
+            
+            document.getElementById('next-month').addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                renderCalendar(currentYear, currentMonth);
+            });
+            
+            document.getElementById('next-year').addEventListener('click', () => {
+                currentYear++;
+                renderCalendar(currentYear, currentMonth);
+            });
+        }
+
+        // 选项卡切换
+        function initTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const panels = document.querySelectorAll('.content-panel');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // 移除所有active类
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    panels.forEach(panel => panel.classList.remove('active'));
+                    
+                    // 添加active类到当前按钮和面板
+                    button.classList.add('active');
+                    const tabId = button.dataset.tab + '-panel';
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // 事件监听
+        document.getElementById('firecrackerBtn').addEventListener('click', function(e) {
+            // 获取按钮位置
+            const rect = this.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            
+            createFirecrackerEffect(x, y);
+            
+            // 额外放几个烟花
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createFirework();
+                }, i * 300);
+            }
+        });
+
+        musicControl.addEventListener('click', toggleMusic);
+
+        document.getElementById('creatorBtn').addEventListener('click', function() {
+            alert('创作者：AI助手\n祝您2026年马年春节快乐！\n龙马精神，马到成功！');
+        });
+
+        // 初始化
+        initDecorations();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        initCalendar();
+        initTabs();
+        updateMusicButton();
+
+        // 页面加载完成后自动创建一些初始特效
+        window.addEventListener('load', () => {
+            // 初始放几个鞭炮增加节日气氛
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        createFirecrackerEffect(
+                            Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.1,
+                            Math.random() * window.innerHeight * 0.6 + window.innerHeight * 0.2
+                        );
+                    }, i * 500);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
