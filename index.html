@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026年春节倒计时和日历 - 马年大吉</title>
+    <title>2026年春节倒计时 - 马年大吉</title>
     <style>
         * {
             margin: 0;
@@ -917,10 +917,10 @@
             <!-- 日历说明 -->
             <div class="info-card" style="margin-top: 30px;">
                 <h3>📋 2026年重要日期</h3>
-                <p><span class="highlight">春节：2月15日（正月初一）</span> - 农历新年，最重要的传统节日</p>
-                <p><span class="highlight">元宵节：3月3日（正月十五）</span> - 吃元宵、赏花灯</p>
+                <p><span class="highlight">春节：2月17日（正月初一）</span> - 农历新年，最重要的传统节日</p>
+                <p><span class="highlight">元宵节：3月4日（正月十五）</span> - 吃元宵、赏花灯</p>
                 <p><span class="highlight">清明节：4月4日</span> - 扫墓祭祖、踏青郊游</p>
-                    <p><span class="highlight">端午节：6月19日（五月初五）</span> - 吃粽子、赛龙舟</p>
+                <p><span class="highlight">端午节：6月19日（五月初五）</span> - 吃粽子、赛龙舟</p>
                 <p><span class="highlight">中秋节：9月25日（八月十五）</span> - 赏月、吃月饼</p>
                 <p><span class="highlight">国庆节：10月1日</span> - 中华人民共和国成立纪念日</p>
             </div>
@@ -939,8 +939,8 @@
     </audio>
 
     <script>
-        // 定义2026年春节日期（2月15日，注意月份从0开始计数）
-        const springFestival2026 = new Date(2026, 1, 15, 0, 0, 0);
+        // 修正：2026年春节日期为2月17日（注意月份从0开始计数，所以是1代表2月）
+        const springFestival2026 = new Date(2026, 1, 17, 0, 0, 0);
         
         // 日历相关变量
         let currentYear = 2026;
@@ -953,11 +953,22 @@
         const musicText = document.getElementById('musicText');
         let isMusicPlaying = false;
 
-        // 重要节日数据
+        // 重要节日数据 - 修正为准确日期
         const festivals2026 = {
             0: [{day: 1, name: "元旦"}], // 1月
-            1: [{day: 14, name: "情人节"}, {day: 15, name: "春节"}], // 2月
-            2: [{day: 3, name: "元宵节"}, {day: 8, name: "妇女节"}], // 3月
+            1: [
+                {day: 14, name: "情人节"}, 
+                {day: 15, name: "除夕"}, 
+                {day: 16, name: "春节"}, // 正月初一
+                {day: 17, name: "初二"},
+                {day: 18, name: "初三"},
+                {day: 19, name: "初四"},
+                {day: 20, name: "初五"},
+                {day: 21, name: "初六"},
+                {day: 22, name: "初七"},
+                {day: 23, name: "初八"}
+            ], // 2月
+            2: [{day: 4, name: "元宵节"}], // 3月，元宵节是正月十五，2026年3月4日
             3: [{day: 4, name: "清明节"}], // 4月
             4: [{day: 1, name: "劳动节"}, {day: 4, name: "青年节"}], // 5月
             5: [{day: 1, name: "儿童节"}, {day: 19, name: "端午节"}], // 6月
@@ -967,6 +978,16 @@
             9: [{day: 1, name: "国庆节"}, {day: 4, name: "重阳节"}], // 10月
             10: [], // 11月
             11: [{day: 24, name: "平安夜"}, {day: 25, name: "圣诞节"}] // 12月
+        };
+
+        // 农历节日数据（简化版，只显示重要日期）
+        const lunarFestivals = {
+            '2-17': '春节', // 正月初一
+            '2-15': '除夕', // 腊月三十
+            '3-4': '元宵', // 正月十五
+            '6-19': '端午', // 五月初五
+            '9-25': '中秋', // 八月十五
+            '10-4': '重阳'  // 九月初九
         };
 
         // 自动播放音乐的尝试
@@ -1362,9 +1383,12 @@
                                today.getMonth() === month && 
                                today.getDate() === day;
                 
-                const isSpringFestival = year === 2026 && month === 1 && day === 15;
+                // 检查是否为春节（2026年2月17日）
+                const isSpringFestival = year === 2026 && month === 1 && day === 17;
+                // 检查是否为除夕（2026年2月16日）
+                const isNewYearsEve = year === 2026 && month === 1 && day === 16;
                 
-                const dayElement = createDayElement(year, month, day, false, isToday, isSpringFestival);
+                const dayElement = createDayElement(year, month, day, false, isToday, isSpringFestival, isNewYearsEve);
                 calendarGrid.appendChild(dayElement);
             }
             
@@ -1383,7 +1407,7 @@
             updateMonthIndicator(year, month);
         }
         
-        function createDayElement(year, month, day, isOtherMonth, isToday = false, isSpringFestival = false) {
+        function createDayElement(year, month, day, isOtherMonth, isToday = false, isSpringFestival = false, isNewYearsEve = false) {
             const dayElement = document.createElement('div');
             dayElement.className = 'calendar-day';
             
@@ -1405,18 +1429,30 @@
             dayNumber.textContent = day;
             dayElement.appendChild(dayNumber);
             
+            // 检查是否为农历节日
+            const monthDayKey = `${month + 1}-${day}`;
+            let lunarFestival = lunarFestivals[monthDayKey];
+            
+            // 如果是除夕，特殊标记
+            if (isNewYearsEve) {
+                lunarFestival = '除夕';
+                dayElement.style.background = 'linear-gradient(135deg, #8B0000, #B22222)';
+                dayElement.style.boxShadow = '0 0 10px rgba(139, 0, 0, 0.7)';
+            }
+            
             // 农历和节日标记
-            const lunarInfo = getLunarInfo(year, month, day);
-            if (lunarInfo) {
+            if (lunarFestival) {
                 const dayLabel = document.createElement('div');
                 dayLabel.className = 'day-label';
-                dayLabel.textContent = lunarInfo;
+                dayLabel.textContent = lunarFestival;
+                dayLabel.style.color = isNewYearsEve ? '#FFD700' : '#FFD700';
+                dayLabel.style.fontWeight = 'bold';
                 dayElement.appendChild(dayLabel);
             }
             
-            // 节日标记
+            // 阳历节日标记
             const festival = getFestivalInfo(month, day);
-            if (festival) {
+            if (festival && !lunarFestival) { // 避免重复显示
                 const festivalMarker = document.createElement('div');
                 festivalMarker.className = 'festival-marker';
                 festivalMarker.textContent = festival;
@@ -1424,15 +1460,6 @@
             }
             
             return dayElement;
-        }
-        
-        function getLunarInfo(year, month, day) {
-            // 简化版的农历信息，实际应该使用农历算法
-            // 这里只返回春节的农历信息
-            if (year === 2026 && month === 1 && day === 15) {
-                return "初一";
-            }
-            return null;
         }
         
         function getFestivalInfo(month, day) {
@@ -1550,7 +1577,7 @@
         musicControl.addEventListener('click', toggleMusic);
 
         document.getElementById('creatorBtn').addEventListener('click', function() {
-            alert('创作者：TangZhiXiang and AI助手:🐳deepseek\n祝您2026年马年春节快乐！\n龙马精神，马到成功！');
+            alert('创作者：AI助手\n祝您2026年马年春节快乐！\n龙马精神，马到成功！');
         });
 
         // 初始化
